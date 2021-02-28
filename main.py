@@ -28,6 +28,12 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
 
+@client.event
+async def on_message(message):
+    print(f'{client.user} has sent a message')
+    bot.process_commands(message)
+
+
 @bot.command()
 async def hello(ctx):
     await ctx.send('Hello, {0}'.format(ctx.author))
