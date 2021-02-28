@@ -66,4 +66,4 @@ async def on_message(message):
         await valentines.setup_valentine()
 
 
-client.run('NzY0MTc2NTA4OTA1NTg2NzI4.X4Cc1Q.5UrzlTzYobnVeWt_47T3p8EepA8')
+client.run()  # secret key goes here
