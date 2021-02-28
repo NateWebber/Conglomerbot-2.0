@@ -2,6 +2,7 @@ import discord
 import os
 import random
 import time
+from discord.ext import commands
 
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
@@ -19,19 +20,17 @@ print(
 
 client = discord.Client()
 
+bot = commands.Bot(command_prefix='$')
+
 
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+@bot.command()
+async def hello(ctx):
+    await ctx.send('Hello, {0}'.format(ctx.author))
 
 
 client.run(retrieved_secret.value)  # secret key goes here
