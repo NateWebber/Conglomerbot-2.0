@@ -18,9 +18,9 @@ retrieved_secret = secretClient.get_secret(secretName)
 print(
     f"The value of secret '{secretName}' in '{keyVaultName}' is: '{retrieved_secret.value}'")
 
-client = discord.Client()
+#client = discord.Client()
 
-bot = commands.Bot(command_prefix='$')
+client = commands.Bot(command_prefix='$')
 
 
 @client.event
@@ -31,10 +31,10 @@ async def on_ready():
 @client.event
 async def on_message(message):
     print(f'{client.user} has sent a message')
-    bot.process_commands(message)
+    client.process_commands(message)
 
 
-@bot.command()
+@client.command()
 async def hello(ctx):
     await ctx.send('Hello, {0}'.format(ctx.author))
 
