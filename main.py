@@ -39,7 +39,7 @@ async def on_message(message):
 
 @client.command()
 async def hello(ctx):
-    await ctx.send('Hello, {0}'.format(ctx.author.mention))
+    await ctx.send('Hello, {0}!'.format(ctx.author.mention))
 
 
 @client.command()
