@@ -58,7 +58,7 @@ async def rr_challenge(ctx, challengee: discord.User):
     if (isinstance(challengee, discord.Member)):
         voice_status_challenger = ctx.author.voice
         voice_status_challengee = challengee.voice
-        if((voice_status_challenger is None) or (voice_status_challengee is None) or (voice_status_challenger != voice_status_challengee)):
+        if((voice_status_challenger is None) or (voice_status_challengee is None) or (voice_status_challenger.channel != voice_status_challengee.channel)):
             await ctx.send("You need to be in the same voice channel!")
             return
         rr.start_challenge(ctx.author, challengee)
@@ -153,10 +153,14 @@ async def rr_shoot(ctx):
                 return
             else:
                 vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_click.mp3'), after=lambda e: print('done', e))
+                while vc.is_playing():
+                    await sleep(1)
                 await ctx.send("Your turn, {0}".format(rr.current_challengee.mention))
                 return
         if (shooter == rr.current_challengee and rr.current_turn == 2): #player 2 takes a shot
             vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_hammer.mp3'), after=lambda e: print('done', e))
+            while vc.is_playing():
+                await sleep(1)
             result = rr.shoot()
             if (result == 6): #dead
                 vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_shot.mp3'), after=lambda e: print('done', e))
@@ -174,6 +178,8 @@ async def rr_shoot(ctx):
                 return
             else:
                 vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_click.mp3'), after=lambda e: print('done', e))
+                while vc.is_playing():
+                    await sleep(1)
                 await ctx.send("Your turn, {0}".format(rr.current_challenger.mention))
                 return
         else:

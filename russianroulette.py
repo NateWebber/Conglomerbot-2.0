@@ -57,9 +57,9 @@ class RussianRoulette:
             else:
                 self.p2_alive = False
         if (self.current_turn == 1):
-            self.current_turn == 2
+            self.current_turn = 2
         else:
-            self.current_turn == 1
+            self.current_turn = 1
         return result
 
     def end_game(self):
