@@ -2,7 +2,7 @@ import discord
 import os
 import random
 import time
-import russianroulette
+import russianroulette as rr
 from discord.ext import commands
 
 from azure.keyvault.secrets import SecretClient
@@ -40,6 +40,11 @@ async def on_message(message):
 @client.command()
 async def hello(ctx):
     await ctx.send('Hello, {0}'.format(ctx.author.mention))
+
+
+@client.command()
+async def rr_start(ctx):
+    await rr.start_challenge(ctx.author)
 
 
 client.run(retrieved_secret.value)  # secret key goes here
