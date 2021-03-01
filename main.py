@@ -2,7 +2,7 @@ import discord
 import os
 import random
 import time
-import russianroulette as rr
+import russianroulette
 from discord.ext import commands
 
 from azure.keyvault.secrets import SecretClient
@@ -22,6 +22,8 @@ print(
 #client = discord.Client()
 
 client = commands.Bot(command_prefix='$')
+
+rr = russianroulette.RussianRoulette()
 
 
 @client.event
