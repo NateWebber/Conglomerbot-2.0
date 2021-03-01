@@ -48,7 +48,7 @@ async def rr_start(ctx, challengee: discord.User):
     if (rr.currently_playing):
         await ctx.send("Sorry, a game is already being played.")
         return
-    if (isinstance(challengee, discord.member.member)):
+    if (isinstance(challengee, discord.Member)):
         rr.start_challenge(ctx.author, challengee)
     else:
         await ctx.send("You need to mention a valid opponent!")
