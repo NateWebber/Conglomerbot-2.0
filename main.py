@@ -43,13 +43,14 @@ async def hello(ctx):
 
 
 @client.command()
-async def rr_start(ctx, challengee: discord.User):
-    print(type(challengee))
-    if (rr.currently_playing):
+async def rr_challenge(ctx, challengee: discord.User):
+    # print(type(challengee))
+    if (rr.currently_playing == True):
         await ctx.send("Sorry, a game is already being played.")
         return
     if (isinstance(challengee, discord.Member)):
         rr.start_challenge(ctx.author, challengee)
+        print(rr.currently_playing)
     else:
         await ctx.send("You need to mention a valid opponent!")
 
