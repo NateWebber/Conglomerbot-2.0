@@ -30,8 +30,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    print(f'{client.user} has sent a message')
-    client.process_commands(message)
+    print(f'{message.author} has sent a message')
+    await client.process_commands(message)
 
 
 @client.command()
