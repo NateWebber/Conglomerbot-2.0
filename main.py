@@ -16,8 +16,6 @@ credential = DefaultAzureCredential()
 secretClient = SecretClient(vault_url=KVUri, credential=credential)
 retrieved_secret = secretClient.get_secret(secretName)
 
-RR_currently_playing = False
-
 print(
     f"The value of secret '{secretName}' in '{keyVaultName}' is: '{retrieved_secret.value}'")
 
@@ -29,7 +27,6 @@ client = commands.Bot(command_prefix='$')
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    RR_currently_playing = False
 
 
 @client.event
@@ -48,7 +45,7 @@ async def hello(ctx):
 @client.command()
 async def rr_challenge(ctx, challengee: discord.User):
     # print(type(challengee))
-    if (RR_currently_playing):
+    if (rr.get_currently_playing):
         await ctx.send("Sorry, a game is already being played.")
         return
     if (isinstance(challengee, discord.Member)):
@@ -60,7 +57,7 @@ async def rr_challenge(ctx, challengee: discord.User):
 
 @client.command()
 async def rr_cancel(ctx):
-    if (RR_currently_playing):
+    if (rr.get_currently_playing):
         print('successfully going to cancel')
     else:
         print('not going to cancel')
