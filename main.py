@@ -2,6 +2,7 @@ import discord
 import os
 import random
 import time
+import russianroulette
 from discord.ext import commands
 
 from azure.keyvault.secrets import SecretClient
