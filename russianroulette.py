@@ -13,15 +13,15 @@ class RussianRoulette:
         self.current_challengee = None
         self.currently_playing = False
 
-    def start_challenge(new_challenger, new_challengee):
+    def start_challenge(self, new_challenger, new_challengee):
         print(
             f"RR challenge started with challenger {new_challenger.name} and challengee {new_challengee.name}")
-        set_currently_playing(True)
-        currently_playing = True
-        print(get_currently_playing())
-        print(currently_playing)
-        current_challenger = new_challenger
-        current_challengee = new_challengee
+        # set_currently_playing(True)
+        self.currently_playing = True
+        # print(get_currently_playing())
+        print(self.currently_playing)
+        self.current_challenger = new_challenger
+        self.current_challengee = new_challengee
 
     def get_currently_playing(self):
         return self.currently_playing
