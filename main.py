@@ -43,8 +43,14 @@ async def hello(ctx):
 
 
 @client.command()
-async def rr_start(ctx):
-    rr.start_challenge(ctx.author)
+async def rr_start(ctx, challengee):
+    if (rr.currently_playing):
+        await ctx.send("Sorry, a game is already being played.")
+        return
+    if (type(challengee) == 'User'):
+        rr.start_challenge(ctx.author, challengee)
+    else:
+        await ctx.send("You need to mention a valid opponent!")
 
 
 client.run(retrieved_secret.value)  # secret key goes here
