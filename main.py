@@ -107,5 +107,16 @@ async def rr_decline(ctx):
         await ctx.send("No active challenge to decline!")
         return
 
+@client.command()
+async def goku(ctx):
+    voice_status = ctx.author.voice
+    if(voice_status is None):
+        await ctx.send("You need to be in a voice channel, Goku!")
+        return
+    else:
+        voice_channel = ctx.author.voice.channel
+        vc = await voice_channel.connect()
+        vc.play(discord.FFmpegPCMAudio('res/audio/goku.mp3'), after=lambda e: print('done', e))
+
 
 client.run(retrieved_secret.value)  # secret key goes here
