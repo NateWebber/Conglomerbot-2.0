@@ -23,8 +23,8 @@ class RussianRoulette:
         current_challenger = new_challenger
         current_challengee = new_challengee
 
-    def get_currently_playing():
-        return currently_playing
+    def get_currently_playing(self):
+        return self.currently_playing
 
-    def set_currently_playing(new):
-        currently_playing = new
+    def set_currently_playing(self, new):
+        self.currently_playing = new
