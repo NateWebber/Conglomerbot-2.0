@@ -4,6 +4,7 @@ import random
 import time
 import russianroulette
 from discord.ext import commands
+from asyncio import sleep
 
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
@@ -107,16 +108,20 @@ async def rr_decline(ctx):
         await ctx.send("No active challenge to decline!")
         return
 
+#goku: silly test command I used to figure out how to play audio files. It stays for now
 @client.command()
 async def goku(ctx):
     voice_status = ctx.author.voice
     if(voice_status is None):
-        await ctx.send("You need to be in a voice channel, Goku!")
+        await ctx.send("You need to be in a voice channel for that, Goku!")
         return
     else:
         voice_channel = ctx.author.voice.channel
         vc = await voice_channel.connect()
         vc.play(discord.FFmpegPCMAudio('res/audio/goku.mp3'), after=lambda e: print('done', e))
+        while vc.is_playing():
+            await sleep(1)
+        await vc.disconnect()
 
 
 client.run(retrieved_secret.value)  # secret key goes here
