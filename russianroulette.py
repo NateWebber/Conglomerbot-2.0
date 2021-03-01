@@ -7,11 +7,14 @@ class RussianRoulette:
 
     currently_playing = False
 
+    current_turn = 1
+
     def __init__(self):
         super().__init__()
         self.current_challenger = None
         self.current_challengee = None
         self.currently_playing = False
+        self.current_turn = 1
 
     def start_challenge(self, new_challenger, new_challengee):
         print(
@@ -22,6 +25,12 @@ class RussianRoulette:
         print(self.currently_playing)
         self.current_challenger = new_challenger
         self.current_challengee = new_challengee
+
+    def play():
+        self.current_turn = 1
+        while(currently_playing):
+            
+
     
     def cancel(self):
         print("Cancelled RR challenge...")

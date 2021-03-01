@@ -52,14 +52,14 @@ async def rr_challenge(ctx, challengee: discord.User):
         return
     if (isinstance(challengee, discord.Member)):
         rr.start_challenge(ctx.author, challengee)
-        await ctx.send("")
+        await ctx.send("{0}, you have been challenged to a game of Russian Roulette by {1}! Use $rr_accept to accept!".format(challengee.mention, ctx.author.mention))
     else:
         await ctx.send("You need to mention a valid opponent!")
 
 
 @client.command()
 async def rr_cancel(ctx):
-    print(rr.get_currently_playing())
+    # print(rr.get_currently_playing())
     if (rr.get_currently_playing()):
         if (rr.current_challenger == ctx.author):
             rr.cancel()
@@ -68,5 +68,17 @@ async def rr_cancel(ctx):
             await ctx.send("You were not the issuer of the challenge!")
     else:
         await ctx.send("No active challenge to cancel!")
+
+@client.command()
+async def rr_accept(ctx):
+    if(rr.get_currently_playing()):
+        if (rr.current_challengee == ctx.author):
+            rr.play()
+            await ctx.send("Starting a game between {0} and {1}!".format(challenger.mention, ctx.author.mention))
+        else:
+            await ctx.send("You were not the person challenged!")
+    else:
+        await ctx.send("No active challenge to accept!")
+
 
 client.run(retrieved_secret.value)  # secret key goes here
