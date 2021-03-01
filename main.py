@@ -81,7 +81,7 @@ async def rr_accept(ctx):
     if(rr.get_currently_playing()):
         if (rr.current_challengee == ctx.author):
             #rr.play() #commented out bc it'll crash when there's no logic
-            await ctx.send("Starting a game between {0} and {1}!".format(challenger.mention, ctx.author.mention))
+            await ctx.send("Starting a game of Russian Roulette between{0} and {1}!".format(rr.current_challenger.mention, ctx.author.mention))
             return
         else:
             await ctx.send("You were not the person challenged!")
@@ -94,15 +94,17 @@ async def rr_accept(ctx):
 @client.command()
 async def rr_decline(ctx):
     if(rr.get_currently_playing()):
+        # print("Decline command seen, currenlty running game, checking for declining...")
         if (rr.current_challengee == ctx.author):
-            await ctx.send("In a display of great cowardice, {0} has declined {1}'s challenge!".format(challengee.mention, challenger.mention))
+            # print("Decliner is the challengee, declining")
+            await ctx.send("In a display of great cowardice, {0} has declined {1}'s challenge!".format(rr.current_challengee.mention, rr.current_challenger.mention))
             rr.cancel()
             return
         else:
             await ctx.send("You were not the person challenged!")
             return
     else:
-        await ctx.send("No active challenge to cancel!")
+        await ctx.send("No active challenge to decline!")
         return
 
 
