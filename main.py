@@ -45,7 +45,7 @@ async def hello(ctx):
 @client.command()
 async def rr_challenge(ctx, challengee: discord.User):
     # print(type(challengee))
-    if (rr.get_currently_playing):
+    if (rr.get_currently_playing()):
         await ctx.send("Sorry, a game is already being played.")
         return
     if (isinstance(challengee, discord.Member)):
@@ -57,7 +57,7 @@ async def rr_challenge(ctx, challengee: discord.User):
 
 @client.command()
 async def rr_cancel(ctx):
-    if (rr.get_currently_playing):
+    if (rr.get_currently_playing()):
         print('successfully going to cancel')
     else:
         print('not going to cancel')
