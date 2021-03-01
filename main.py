@@ -38,7 +38,7 @@ async def on_message(message):
 
 @client.command()
 async def hello(ctx):
-    await ctx.send('Hello, {0}'.format(ctx.author))
+    await ctx.send('Hello, {0}'.format(ctx.author.mention))
 
 
 client.run(retrieved_secret.value)  # secret key goes here
