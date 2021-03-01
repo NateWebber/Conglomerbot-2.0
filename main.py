@@ -50,13 +50,13 @@ async def rr_challenge(ctx, challengee: discord.User):
         return
     if (isinstance(challengee, discord.Member)):
         rr.start_challenge(ctx.author, challengee)
-        RR_currently_playing = True
     else:
         await ctx.send("You need to mention a valid opponent!")
 
 
 @client.command()
 async def rr_cancel(ctx):
+    print(rr.get_currently_playing())
     if (rr.get_currently_playing()):
         print('successfully going to cancel')
     else:
