@@ -32,6 +32,7 @@ class RussianRoulette:
         self.current_turn = 1
         while(currently_playing):
             #TODO write the game logic ezpz
+            print("please dont crash bc i haven't written you yet thanks")
 
     #cancel the current challenge
     def cancel(self):

@@ -75,7 +75,7 @@ async def rr_cancel(ctx):
 async def rr_accept(ctx):
     if(rr.get_currently_playing()):
         if (rr.current_challengee == ctx.author):
-            rr.play()
+            #rr.play() #commented out bc it'll crash when there's no logic
             await ctx.send("Starting a game between {0} and {1}!".format(challenger.mention, ctx.author.mention))
         else:
             await ctx.send("You were not the person challenged!")
