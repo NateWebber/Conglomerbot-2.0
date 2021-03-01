@@ -148,6 +148,8 @@ async def rr_shoot(ctx):
                 await vc.disconnect()
                 rr.end_game()
                 #unmute eventually
+                await sleep(300)
+                await ctx.author.edit(mute=False, reason="Resurrected from Russian Roulette")
                 return
             else:
                 vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_click.mp3'), after=lambda e: print('done', e))
@@ -167,6 +169,8 @@ async def rr_shoot(ctx):
                 await vc.disconnect()
                 rr.end_game()
                 #unmute eventually
+                await sleep(300)
+                await ctx.author.edit(mute=False, reason="Resurrected from Russian Roulette")
                 return
             else:
                 vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_click.mp3'), after=lambda e: print('done', e))
