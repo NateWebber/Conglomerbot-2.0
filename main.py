@@ -49,10 +49,18 @@ async def hello(ctx):
 @client.command()
 async def rr_challenge(ctx, challengee: discord.User):
     # print(type(challengee))
-    if (rr.get_currently_playing()):
+    if(rr.currently_challenging):
+        await ctx.send("Sorry, there is already an outstanding challenge.")
+        return
+    if (rr.currently_playing):
         await ctx.send("Sorry, a game is already being played.")
         return
     if (isinstance(challengee, discord.Member)):
+        voice_status_challenger = ctx.author.voice
+        voice_status_challengee = challengee.voice
+        if((voice_status_challenger is None) or (voice_status_challengee is None) or (voice_status_challenger != voice_status_challengee)):
+            await ctx.send("You need to be in the same voice channel!")
+            return
         rr.start_challenge(ctx.author, challengee)
         await ctx.send("{0}, you have been challenged to a game of Russian Roulette by {1}! Use $rr_accept to accept!".format(challengee.mention, ctx.author.mention))
         return
@@ -64,7 +72,7 @@ async def rr_challenge(ctx, challengee: discord.User):
 @client.command()
 async def rr_cancel(ctx):
     # print(rr.get_currently_playing())
-    if (rr.get_currently_playing()):
+    if (rr.currently_challenging):
         if (rr.current_challenger == ctx.author):
             rr.cancel()
             await ctx.send("Cancelled the active challenge.")
@@ -79,7 +87,7 @@ async def rr_cancel(ctx):
 #rr_accept: accepts the current russian roulette challenge, provided the author is the challengee
 @client.command()
 async def rr_accept(ctx):
-    if(rr.get_currently_playing()):
+    if(rr.currently_challenging):
         if (rr.current_challengee == ctx.author):
             #rr.play() #commented out bc it'll crash when there's no logic
             await ctx.send("Starting a game of Russian Roulette between{0} and {1}!".format(rr.current_challenger.mention, ctx.author.mention))
@@ -94,8 +102,8 @@ async def rr_accept(ctx):
 #rr_decline: declines the current russian roulette challenge, provided the author is the challengee
 @client.command()
 async def rr_decline(ctx):
-    if(rr.get_currently_playing()):
-        # print("Decline command seen, currenlty running game, checking for declining...")
+    if(rr.currently_challenging):
+        # print("Decline command seen, currently running challenge, checking for declining...")
         if (rr.current_challengee == ctx.author):
             # print("Decliner is the challengee, declining")
             await ctx.send("In a display of great cowardice, {0} has declined {1}'s challenge!".format(rr.current_challengee.mention, rr.current_challenger.mention))
@@ -122,6 +130,11 @@ async def goku(ctx):
         while vc.is_playing():
             await sleep(1)
         await vc.disconnect()
+
+@client.command()
+async def self_mute(ctx):
+    await ctx.author.edit(mute=True, reason="Self-Mute command")
+
 
 
 client.run(retrieved_secret.value)  # secret key goes here
