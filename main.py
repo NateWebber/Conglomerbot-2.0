@@ -44,7 +44,7 @@ async def hello(ctx):
 
 @client.command()
 async def rr_start(ctx):
-    await rr.start_challenge(ctx.author)
+    rr.start_challenge(ctx.author)
 
 
 client.run(retrieved_secret.value)  # secret key goes here
