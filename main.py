@@ -52,6 +52,7 @@ async def rr_challenge(ctx, challengee: discord.User):
         return
     if (isinstance(challengee, discord.Member)):
         rr.start_challenge(ctx.author, challengee)
+        await ctx.send("")
     else:
         await ctx.send("You need to mention a valid opponent!")
 
@@ -60,8 +61,12 @@ async def rr_challenge(ctx, challengee: discord.User):
 async def rr_cancel(ctx):
     print(rr.get_currently_playing())
     if (rr.get_currently_playing()):
-        print('successfully going to cancel')
+        if (rr.current_challenger == ctx.author):
+            rr.cancel()
+            await ctx.send("Cancelled the active challenge.")
+        else:
+            await ctx.send("You were not the issuer of the challenge!")
     else:
-        print('not going to cancel')
+        await ctx.send("No active challenge to cancel!")
 
 client.run(retrieved_secret.value)  # secret key goes here

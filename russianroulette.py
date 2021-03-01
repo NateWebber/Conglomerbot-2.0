@@ -22,6 +22,12 @@ class RussianRoulette:
         print(self.currently_playing)
         self.current_challenger = new_challenger
         self.current_challengee = new_challengee
+    
+    def cancel(self):
+        print("Cancelled RR challenge...")
+        self.current_challenger = None
+        self.current_challengee = None
+        self.currently_playing = False
 
     def get_currently_playing(self):
         return self.currently_playing
