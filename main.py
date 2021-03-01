@@ -44,6 +44,7 @@ async def hello(ctx):
 
 @client.command()
 async def rr_start(ctx, challengee):
+    print(type(challengee))
     if (rr.currently_playing):
         await ctx.send("Sorry, a game is already being played.")
         return
