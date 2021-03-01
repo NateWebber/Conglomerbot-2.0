@@ -84,21 +84,6 @@ async def rr_cancel(ctx):
         await ctx.send("No active challenge to cancel!")
         return
 
-#rr_accept: accepts the current russian roulette challenge, provided the author is the challengee
-@client.command()
-async def rr_accept(ctx):
-    if(rr.currently_challenging):
-        if (rr.current_challengee == ctx.author):
-            #rr.play() #commented out bc it'll crash when there's no logic
-            await ctx.send("Starting a game of Russian Roulette between{0} and {1}!".format(rr.current_challenger.mention, ctx.author.mention))
-            return
-        else:
-            await ctx.send("You were not the person challenged!")
-            return
-    else:
-        await ctx.send("No active challenge to accept!")
-        return
-
 #rr_decline: declines the current russian roulette challenge, provided the author is the challengee
 @client.command()
 async def rr_decline(ctx):
@@ -114,6 +99,85 @@ async def rr_decline(ctx):
             return
     else:
         await ctx.send("No active challenge to decline!")
+        return
+
+#rr_accept: accepts the current russian roulette challenge, provided the author is the challengee
+@client.command()
+async def rr_accept(ctx):
+    if(rr.currently_challenging):
+        if (rr.current_challengee == ctx.author):
+            rr.play()
+            await ctx.send("Starting a game of Russian Roulette between{0} and {1}!".format(rr.current_challenger.mention, ctx.author.mention))
+            await ctx.send("{0}, you go first! Use $rr_shoot to fire.".format(rr.current_challenger.mention))
+            return
+        else:
+            await ctx.send("You were not the person challenged!")
+            return
+    else:
+        await ctx.send("No active challenge to accept!")
+        return
+
+@client.command()
+async def rr_shoot(ctx):
+    if(rr.currently_playing):
+        shooter = ctx.author
+        if (not(shooter == rr.current_challenger or shooter == rr.current_challengee)):
+            await ctx.send("You aren't one of the active players!")
+            return
+        voice_channel = shooter.voice.channel
+        vcl = client.voice_clients
+        vc = None
+        if (len(vcl) == 0):
+            vc = await voice_channel.connect()
+        else:
+            vc = vcl[0]
+        if (shooter == rr.current_challenger and rr.current_turn == 1): #player 1 takes a shot
+            vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_hammer.mp3'), after=lambda e: print('done', e))
+            while vc.is_playing():
+                await sleep(1)
+            result = rr.shoot()
+            print(f"Shot result: {result}")
+            if (result == 6): #dead
+                vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_shot.mp3'), after=lambda e: print('done', e))
+                while vc.is_playing():
+                    await sleep(1)
+                await ctx.author.edit(mute=True, reason="Died in Russian Roulette")
+                await ctx.send("{0} has died in a game of Russian Roulette against {1}".format(rr.current_challenger.mention, rr.current_challengee.mention))
+                while vc.is_playing():
+                    await sleep(1)
+                await vc.disconnect()
+                rr.end_game()
+                #unmute eventually
+                return
+            else:
+                vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_click.mp3'), after=lambda e: print('done', e))
+                await ctx.send("Your turn, {0}".format(rr.current_challengee.mention))
+                return
+        if (shooter == rr.current_challengee and rr.current_turn == 2): #player 2 takes a shot
+            vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_hammer.mp3'), after=lambda e: print('done', e))
+            result = rr.shoot()
+            if (result == 6): #dead
+                vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_shot.mp3'), after=lambda e: print('done', e))
+                while vc.is_playing():
+                    await sleep(1)
+                await ctx.author.edit(mute=True, reason="Died in Russian Roulette")
+                await ctx.send("{0} has died in a game of Russian Roulette against {1}".format(rr.current_challengee, rr.current_challenger))
+                while vc.is_playing():
+                    await sleep(1)
+                await vc.disconnect()
+                rr.end_game()
+                #unmute eventually
+                return
+            else:
+                vc.play(discord.FFmpegPCMAudio('res/audio/rr/rr_click.mp3'), after=lambda e: print('done', e))
+                await ctx.send("Your turn, {0}".format(rr.current_challenger.mention))
+                return
+        else:
+            await ctx.send("It isn't your turn!")
+            return
+
+    else:
+        await ctx.send("No active game!")
         return
 
 #goku: silly test command I used to figure out how to play audio files. It stays for now

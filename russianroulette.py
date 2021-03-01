@@ -1,5 +1,5 @@
 import discord
-
+from random import randint
 
 class RussianRoulette:
     current_challenger = None
@@ -10,6 +10,9 @@ class RussianRoulette:
 
     current_turn = 1
 
+    p1_alive = True
+    p2_alive = True
+
     def __init__(self):
         super().__init__()
         self.current_challenger = None
@@ -17,6 +20,8 @@ class RussianRoulette:
         self.currently_challenging = False
         self.currently_playing = False
         self.current_turn = 1
+        self.p1_alive = True
+        self.p2_alive = True
 
     #issue a challenge for a game
     def start_challenge(self, new_challenger, new_challengee):
@@ -29,13 +34,6 @@ class RussianRoulette:
         self.current_challenger = new_challenger
         self.current_challengee = new_challengee
 
-    #run a game
-    def play():
-        self.current_turn = 1
-        while(currently_challenging):
-            #TODO write the game logic ezpz
-            print("please dont crash bc i haven't written you yet thanks")
-
     #cancel the current challenge
     def cancel(self):
         print("Cancelled RR challenge...")
@@ -43,10 +41,36 @@ class RussianRoulette:
         self.current_challengee = None
         self.currently_challenging = False
 
-    #getter
-    def get_currently_challenging(self):
-        return self.currently_challenging
+    #run a game
+    def play(self):
+        self.current_turn = 1
+        self.currently_challenging = False
+        self.currently_playing = True
+        self.p1_alive = True
+        self.p2_alive = True
 
-    #setter
-    def set_currently_challenging(self, new):
-        self.currently_challenging = new
+    def shoot(self):
+        result = randint(1, 6)
+        if (result == 6):
+            if (self.current_turn == 1):
+                self.p1_alive = False
+            else:
+                self.p2_alive = False
+        if (self.current_turn == 1):
+            self.current_turn == 2
+        else:
+            self.current_turn == 1
+        return result
+
+    def end_game(self):
+        self.current_challenger = None
+        self.current_challengee = None
+        self.currently_challenging = False
+        self.currently_playing = False
+        self.current_turn = 1
+        self.p1_alive = True
+        self.p2_alive = True
+        
+
+
+
