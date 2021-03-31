@@ -6,6 +6,7 @@ import russianroulette
 import birthdays
 import json
 import datetime
+import threading
 from datetime import date
 from typing import Union
 from discord.ext import commands, tasks
@@ -38,6 +39,7 @@ with open("users.json", "r") as user_json:
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
+    await checkBirthdayTask.start()
 
 
 @client.event
@@ -225,6 +227,8 @@ async def forceBdayCheck(ctx):
     msg = birthdays.checkBirthday()
     if msg != None:
         await ctx.send(msg)
+    else:
+        await ctx.send("No birthdays today!")
 
 #testJsonPing: another test command. seeing if I can match a pinged user to their json category (I can)
 @client.command()
@@ -246,19 +250,31 @@ async def getBirthday(ctx, target: Union[discord.User, str]):
     else:
         await ctx.send("Sorry, I couldn't find that person.")
 
+
+
+
 @tasks.loop(hours=24)
-async def checkBirthdayTask(self):
+async def checkBirthdayTask():
     msg = birthdays.checkBirthday()
     if msg != None:
-        await ctx.send(msg)
+        channel = client.get_channel(645399850518839327)
+        await channel.send(msg)
+    else:
+        print("No birthdays today!")
 
 @checkBirthdayTask.before_loop
-async def before_checkBirthdayTask(self):
-    print("waiting for bot to be ready")
-    await self.client.wait_until_ready()
+async def before_checkBirthdayTask():
+    print('waiting until 10AM to do a birthday check')
+    time_to_start = False
+    while not time_to_start:
+        now = datetime.datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        #print ("Current Time =", current_time)
+        if (current_time == "16:00:00"): #timezone funny stuff, this is 10 AM EST
+            time_to_start = True
+        await sleep(1)
 
-
-
+    
 
 
 client.run(retrieved_secret.value)  # secret key goes here
