@@ -4,6 +4,7 @@ import random
 import time
 import russianroulette
 import birthdays
+import json
 from discord.ext import commands, tasks
 from asyncio import sleep
 
@@ -26,6 +27,8 @@ print(
 client = commands.Bot(command_prefix='$')
 
 rr = russianroulette.RussianRoulette()
+
+data = None
 
 
 @client.event
@@ -206,21 +209,36 @@ async def goku(ctx):
             await sleep(1)
         await vc.disconnect()
 
+#self_mute: lets you server mute yourself. was really just used for testing
 @client.command()
 async def self_mute(ctx):
     await ctx.author.edit(mute=True, reason="Self-Mute command")
 
+#forceBdayCheck: manually force the bot to check if there are any birthdays today
 @client.command()
 async def forceBdayCheck(ctx):
     await ctx.send("Manually starting a birthday check!")
     msg = birthdays.checkBirthday()
-    if msg:
+    if msg != None:
         await ctx.send(msg)
+
+#testJsonPing: another test command. seeing if I can match a pinged user to their json category (I can)
+@client.command()
+async def testJsonPing(ctx, target: discord.User):
+    print(str(target))
+    with open("users.json", "r") as user_json:
+        data = json.load(user_json)
+    for user in data["users"]:
+        print("discord_ping read as: {ping}".format(ping = user["discord_ping"]))
+        if user["discord_ping"] == str(target):
+            print("Matched target to {name}".format(name = user["name"]))
+
+
 
 @tasks.loop(hours=24)
 async def checkBirthdayTask(self):
     msg = birthdays.checkBirthday()
-    if msg:
+    if msg != None:
         await ctx.send(msg)
 
 @checkBirthdayTask.before_loop
