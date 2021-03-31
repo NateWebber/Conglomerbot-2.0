@@ -3,7 +3,8 @@ import os
 import random
 import time
 import russianroulette
-from discord.ext import commands
+import birthdays
+from discord.ext import commands, tasks
 from asyncio import sleep
 
 from azure.keyvault.secrets import SecretClient
@@ -208,6 +209,26 @@ async def goku(ctx):
 @client.command()
 async def self_mute(ctx):
     await ctx.author.edit(mute=True, reason="Self-Mute command")
+
+@client.command()
+async def forceBdayCheck(ctx):
+    await ctx.send("Manually starting a birthday check!")
+    msg = birthdays.checkBirthday()
+    if msg:
+        await ctx.send(msg)
+
+@tasks.loop(hours=24)
+async def checkBirthdayTask(self):
+    msg = birthdays.checkBirthday()
+    if msg:
+        await ctx.send(msg)
+
+@checkBirthdayTask.before_loop
+async def before_checkBirthdayTask(self):
+    print("waiting for bot to be ready")
+    await self.client.wait_until_ready()
+
+
 
 
 
