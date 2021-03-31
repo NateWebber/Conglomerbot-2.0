@@ -1,6 +1,8 @@
 #Important Note: in users.json, pronouns are stored in order [nominative, accusative/dative, genitive]
 
 import json
+import discord
+import datetime
 from datetime import date
 
 data = None
@@ -31,6 +33,17 @@ def checkBirthday():
             return return_string
     return None
 
+def getBirthday(target):
+    for user in data["users"]:
+        if (user["discord_ping"]) == target or user["name"] == target:
+            found_bday = user["birthday"]
+            bday_obj = datetime.datetime.strptime(found_bday, '%m/%d/%Y')
+            long_bday = bday_obj.strftime('%B %d')
+            today = date.today()
+            days_until_bday = calculateNextBirthday(bday_obj, datetime.datetime.now())
+            return ("{name}'s birthday is {bday}. That will be in {days} day(s)!".format(name=user["name"], bday=long_bday, days=days_until_bday))
+    return None
+
         
 
 def conjugateToBe(pronoun):
@@ -38,3 +51,11 @@ def conjugateToBe(pronoun):
         return "is"
     else:
         return "are"
+
+
+def calculateNextBirthday(bday, today):
+    delta1 = datetime.datetime(today.year, bday.month, bday.day)
+    delta2 = datetime.datetime(today.year+1, bday.month, bday.day)
+
+    return (((delta1 if delta1 > today else delta2) - today).days + 1)
+

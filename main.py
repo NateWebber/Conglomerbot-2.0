@@ -5,6 +5,9 @@ import time
 import russianroulette
 import birthdays
 import json
+import datetime
+from datetime import date
+from typing import Union
 from discord.ext import commands, tasks
 from asyncio import sleep
 
@@ -29,7 +32,8 @@ client = commands.Bot(command_prefix='$')
 rr = russianroulette.RussianRoulette()
 
 data = None
-
+with open("users.json", "r") as user_json:
+    data = json.load(user_json)
 
 @client.event
 async def on_ready():
@@ -224,16 +228,23 @@ async def forceBdayCheck(ctx):
 
 #testJsonPing: another test command. seeing if I can match a pinged user to their json category (I can)
 @client.command()
-async def testJsonPing(ctx, target: discord.User):
+async def testJsonPing(ctx, target):
     print(str(target))
-    with open("users.json", "r") as user_json:
-        data = json.load(user_json)
     for user in data["users"]:
         print("discord_ping read as: {ping}".format(ping = user["discord_ping"]))
         if user["discord_ping"] == str(target):
             print("Matched target to {name}".format(name = user["name"]))
 
-
+@client.command()
+async def getBirthday(ctx, target: Union[discord.User, str]):
+    if type(target) == discord.member.Member:
+        print("converting pinged user into string...")
+        target = target.name + '#' + target.discriminator
+    msg = birthdays.getBirthday(target)
+    if msg != None:
+        await ctx.send(msg)
+    else:
+        await ctx.send("Sorry, I couldn't find that person.")
 
 @tasks.loop(hours=24)
 async def checkBirthdayTask(self):
