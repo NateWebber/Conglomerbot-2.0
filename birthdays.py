@@ -24,7 +24,7 @@ def checkBirthday():
         if today_no_year == user_bday_no_year:
             print("Detected that today is {name}'s birthday!".format(name = user["name"]))
             conjugated = conjugateToBe(user["pronouns"][0])
-            preformat_string = "@everyone Today is {name}'s birthday! {nom_pronoun} {conjugated_to_be} {age} years old today. Be sure to wish {acc_pronoun} a happy birthday!"
+            preformat_string = "@everyone 🎂🎉🎈 Today is {name}'s birthday! {nom_pronoun} {conjugated_to_be} {age} years old today. Be sure to wish {acc_pronoun} a happy birthday! 🎂🎉🎈"
             return_string = preformat_string.format(name = user["name"], nom_pronoun = user["pronouns"][0].capitalize(), conjugated_to_be = conjugated, age = (int(today_year) - int(user_bday_year)), acc_pronoun = user["pronouns"][1])
             return return_string
     return None
