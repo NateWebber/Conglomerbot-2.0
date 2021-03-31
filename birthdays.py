@@ -31,7 +31,7 @@ def checkBirthday():
 
 def getBirthday(target):
     for user in data["users"]:
-        if (user["discord_ping"]) == target or user["name"] == target:
+        if (user["discord_id"]) == target or user["name"] == target:
             found_bday = user["birthday"]
             bday_obj = datetime.datetime.strptime(found_bday, '%m/%d/%Y')
             long_bday = bday_obj.strftime('%B %d')

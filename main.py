@@ -233,25 +233,37 @@ async def forceBdayCheck(ctx):
 #testJsonPing: another test command. seeing if I can match a pinged user to their json category (I can)
 @client.command()
 async def testJsonPing(ctx, target):
-    print(str(target))
+    print(target.id)
     for user in data["users"]:
-        print("discord_ping read as: {ping}".format(ping = user["discord_ping"]))
-        if user["discord_ping"] == str(target):
+        print("discord_id read as: {id}".format(id = user["discord_id"]))
+        if user["discord_id"] == target.id:
             print("Matched target to {name}".format(name = user["name"]))
 
+#getBirthday: returns the birthday of the mentioned user, or the person with the name provided
 @client.command()
 async def getBirthday(ctx, target: Union[discord.User, str]):
     if type(target) == discord.member.Member:
-        print("converting pinged user into string...")
-        target = target.name + '#' + target.discriminator
+        target = target.id
     msg = birthdays.getBirthday(target)
     if msg != None:
         await ctx.send(msg)
     else:
         await ctx.send("Sorry, I couldn't find that person.")
 
-
-
+#twerkFor: why
+@client.command()
+async def twerkFor(ctx, target: Union[discord.User, str]):
+    if type(target) == discord.member.Member:
+        print("converting pinged user into string...")
+        print(target)
+        target = target.id
+        print(target)
+    for user in data["users"]:
+        if (user["discord_id"]) == target or user["name"] == target:
+            print("getting user with id {id}".format(id = user["discord_id"]))
+            pingable_user = await client.fetch_user(user["discord_id"])
+            await ctx.send(f"{pingable_user.mention} Twerking for you 😘")
+            await ctx.send(file=discord.File('res/img/robotwerksmall.gif'))
 
 @tasks.loop(hours=24)
 async def checkBirthdayTask():
