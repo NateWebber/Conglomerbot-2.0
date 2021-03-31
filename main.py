@@ -250,6 +250,10 @@ async def getBirthday(ctx, target: Union[discord.User, str]):
     else:
         await ctx.send("Sorry, I couldn't find that person.")
 
+@client.command()
+async def nextBirthday(ctx):
+    await ctx.send(birthdays.getSoonestBirthday())
+
 #twerkFor: why
 @client.command()
 async def twerkFor(ctx, target: Union[discord.User, str]):

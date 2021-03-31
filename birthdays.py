@@ -53,3 +53,15 @@ def calculateNextBirthday(bday, today):
 
     return (((delta1 if delta1 > today else delta2) - today).days + 1)
 
+def getSoonestBirthday():
+    days = 999
+    closest_user = None
+    for user in data["users"]:
+        found_bday = user["birthday"]
+        bday_obj = datetime.datetime.strptime(found_bday, '%m/%d/%Y')
+        new_days = calculateNextBirthday(bday_obj, datetime.datetime.now())
+        if new_days < days:
+            days = new_days
+            closest_user = user
+    return ("{name}'s birthday is next on {bday}. That will be in {days} day(s)!".format(name=closest_user["name"], bday=datetime.datetime.strptime(closest_user["birthday"], '%m/%d/%Y').strftime('%B %d'), days=days))
+
